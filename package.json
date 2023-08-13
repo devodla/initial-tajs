@@ -6,10 +6,11 @@
   "type": "module",
   "scripts": {
     "start": "node api.js",
-    "test": "NODE_ENV=test node --test test/",
-    "test:cov-native": "NODE_ENV=test node --experimental-test-coverage --test test/",
-    "test:cov": "NODE_ENV=test npx c8 --include app --reporter html --reporter text node --test test/",
-    "test:watch": "NODE_ENV=test node --watch --test test/",
+    "test": "node --test",
+    "test:cov-native": "node --experimental-test-coverage --test",
+    "test:cov:spec": "npx c8 --include app --reporter html --reporter text node --test test/spec",
+    "test:cov:e2e": "npx c8 --include app --reporter html --reporter text node --test test/e2e",
+    "test:watch": "node --watch --test test",
     "dev": "node --watch api.js"
   },
   "keywords": [],

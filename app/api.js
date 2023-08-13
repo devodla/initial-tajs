@@ -42,4 +42,4 @@ async function handler(request, response) {
 
 const app = createServer(handler);
 
-export { app };
+export { app, handler };
