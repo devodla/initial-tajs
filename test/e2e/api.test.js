@@ -76,4 +76,26 @@ describe("API E2E test suites", () => {
       _globalToken = response.token;
     });
   });
+
+  describe("/", () => {
+    it("should not be allowed to access private data without a token", async () => {
+      const result = await fetch(BASE_URL);
+      const expected = 400;
+      assert.strictEqual(
+        result.status,
+        expected,
+        `status code should be 400, actual: ${result.status}`
+      );
+
+      const expectedBody = { error: "invalid token!" };
+      const response = await result.json();
+      assert.deepStrictEqual(
+        response,
+        expectedBody,
+        `response.body should be ${JSON.stringify(
+          expectedBody
+        )}, actual: ${JSON.stringify(response)}`
+      );
+    });
+  });
 });
