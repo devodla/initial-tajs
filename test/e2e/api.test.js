@@ -1,6 +1,6 @@
 import assert from "node:assert";
 import { after, before, describe, it } from "node:test";
-import { app } from "../../api.js";
+import { app } from "../../app/api.js";
 
 describe("API E2E test suites", () => {
   let BASE_URL = "";
@@ -88,6 +88,34 @@ describe("API E2E test suites", () => {
       );
 
       const expectedBody = { error: "invalid token!" };
+      const response = await result.json();
+      assert.deepStrictEqual(
+        response,
+        expectedBody,
+        `response.body should be ${JSON.stringify(
+          expectedBody
+        )}, actual: ${JSON.stringify(response)}`
+      );
+    });
+
+    it("should be allowed to access private data with a valid token", async () => {
+      const input = {
+        headers: {
+          authorization: _globalToken,
+        },
+      };
+      const result = await fetch(BASE_URL, {
+        method: "GET",
+        headers: input.headers,
+      });
+      const expected = 200;
+      assert.strictEqual(
+        result.status,
+        expected,
+        `status code should be 200, actual: ${result.status}`
+      );
+
+      const expectedBody = { result: "Hey welcome!" };
       const response = await result.json();
       assert.deepStrictEqual(
         response,
