@@ -5,6 +5,7 @@ import { app } from "../../api.js";
 describe("API E2E test suites", () => {
   let BASE_URL = "";
   let _server = {};
+  let _globalToken = "";
 
   before(async () => {
     _server = app;
@@ -47,6 +48,32 @@ describe("API E2E test suites", () => {
           expectedBody
         )}, actual: ${JSON.stringify(response)}`
       );
+    });
+
+    it("should login successfully given user and password", async () => {
+      const input = {
+        user: "devolda",
+        password: "123",
+      };
+      const result = await fetch(`${BASE_URL}/login`, {
+        method: "POST",
+        body: JSON.stringify(input),
+      });
+      const expected = 200;
+      assert.strictEqual(
+        result.status,
+        expected,
+        `status code should be 200, actual: ${result.status}`
+      );
+
+      const response = await result.json();
+      assert.ok(
+        response.token.length > 20,
+        `response.token should be a valid jwt token, actual: ${JSON.stringify(
+          response.token
+        )}`
+      );
+      _globalToken = response.token;
     });
   });
 });
