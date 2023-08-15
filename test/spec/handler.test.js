@@ -107,4 +107,36 @@ describe("api unit test suite", () => {
       );
     });
   });
+
+  describe("/", () => {
+    it("should not be allowed to access private route without a token provided", async (context) => {
+      const inputRequest = mockRequest({ method: "GET" });
+      const outputReponse = mockResponse({
+        mockContext: context.mock,
+      });
+      await handler(inputRequest, outputReponse);
+      const expected = 400;
+      assert.strictEqual(
+        getFirstCallArg(outputReponse.writeHead),
+        expected,
+        `should receive 400 status code, received ${getFirstCallArg(
+          outputReponse.writeHead
+        )}`
+      );
+
+      const expectedResponse = JSON.stringify({ error: "invalid token!" });
+      assert.strictEqual(
+        outputReponse.end.mock.callCount(),
+        1,
+        "should call response.end once"
+      );
+      assert.strictEqual(
+        getFirstCallArg(outputReponse.end),
+        expectedResponse,
+        `should receive ${expectedResponse}, received ${getFirstCallArg(
+          outputReponse.end
+        )}`
+      );
+    });
+  });
 });
